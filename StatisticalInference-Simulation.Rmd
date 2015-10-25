@@ -1,0 +1,73 @@
+---
+title: "Statistical Inference - Simulation"
+author: "Ajani Gyasi"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+---
+
+
+
+
+
+```{r required packages, echo=FALSE}
+require('knitr', quietly = TRUE)
+```
+##Overview
+In this project, we will examine whether an exponential distribution is comparable to the Central Limit Theorem. The exponential distribution will simulate 1000 trails with a sample size of 40, while a lambda rate is set to 0.2. As we investigate the distribution of averages, we will conclude whether its comparability satifies the Central Limit Theorem.
+
+##Simulations 
+We are doing a thousand simulations of the average (**means**) of 40 samples drawn from the exponential distribution.
+
+```{r simulations}
+sim <- 1000 #number of simulations
+lambda <- 0.2 #lambda rate
+n <- 40 #number of samples
+m_exp <- 1/lambda #exponential mean
+sd_exp <- 1/lambda #exponential standard deviation
+
+
+set.seed(348) #seed for reporoducibility
+dat_simulation <- matrix(rexp(n * sim, lambda), sim) #calculation
+means <- rowMeans(dat_simulation) #simulation
+```
+
+
+##Sample Mean vs. Theoretical Mean
+The sample mean or the simulated mean is 5.035, while the theoretical mean is 5. Notice, that this gives us a close estimate of the population mean.
+```{r mean, echo=FALSE}
+sample_mean <- round(mean(means), 3)
+print(paste("Sample mean:", sample_mean))
+theor_mean <- m_exp
+print(paste("Theoretical mean:", theor_mean))
+```
+
+##Sample Variance vs. Theoretical Variance
+The sample variance or the simulated variance is 0.634, while the theoretical variance is 0.625. Again, these numbers are fairly close.
+```{r variance, echo=FALSE}
+sample_var <- round(var(means), 3)
+print(paste("Sample variance:", sample_var))
+theor_var <- (sd_exp)^2/n
+print(paste("Theoretical variance:", theor_var))
+```
+
+
+##Distribution 
+The diagrams below showcase the exponential distribution being approximately normal. The Central Limit Theorem tells us that the averages of samples will follow a normal distribution. The two histograms prove the sample density follows a normal distribution. The qqplot double checks whether our simulation is in agreeance with the Central Limit Theorem.
+
+
+```{r , echo=FALSE}
+hist(means, breaks = 25, probability = TRUE, xlab = "", main = "Distribution of sample averages", col = "wheat")
+lines(density(means), col = "green", lwd = 2) #simulation sample averages 
+abline(v=m_exp, col = "red", lwd = 2) #Theoretical center of distribution
+#Theoretical density of sample averages
+curve(dnorm(x, m_exp, sd_exp/sqrt(n)), min(means), max(means), add = TRUE, col = "purple", lty = 2, lwd = 2)
+legend("topright", c("simulation density", "theoretical density","theoretical mean"),bty = "n", lty = c(1,2,1), col = c("green", "purple", "red"))
+
+library(ggplot2)
+data <- data.frame(means)
+normal <- ggplot(data, aes(x = means)) + geom_histogram(aes(y = ..density..), col = "grey", fill = "beige") 
+normal + geom_density(aes(col = "purple"))
+
+qqnorm(means)
+qqline(means)
+```
