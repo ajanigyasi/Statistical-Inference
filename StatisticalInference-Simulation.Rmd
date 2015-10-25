@@ -55,6 +55,9 @@ print(paste("Theoretical variance:", theor_var))
 The diagrams below showcase the exponential distribution being approximately normal. The Central Limit Theorem tells us that the averages of samples will follow a normal distribution. The two histograms prove the sample density follows a normal distribution. The qqplot double checks whether our simulation is in agreeance with the Central Limit Theorem.
 
 
+
+
+
 ```{r , echo=FALSE}
 hist(means, breaks = 25, probability = TRUE, xlab = "", main = "Distribution of sample averages", col = "wheat")
 lines(density(means), col = "green", lwd = 2) #simulation sample averages 
