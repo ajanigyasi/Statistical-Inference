@@ -1,0 +1,45 @@
+---
+title: "Tooth Growth as Result of Vitamin C Supplements Analysis"
+author: "Ajani Gyasi"
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output: pdf_document
+---
+
+##Overview
+In this project, we are to analyze the *ToothGrowth* data set found in the R data sets package. The total observations of the data set amount to sixty. Let's explore!
+
+##Load & Summarize Data
+
+```{r, echo=TRUE}
+library(datasets)
+library(ggplot2)
+
+
+data("ToothGrowth")
+summary(ToothGrowth)
+head(ToothGrowth)
+
+```
+
+##Visualize
+Notice, in the graph the two delivery methods, **OJ** & **VC**,  show a true correlation.
+
+```{r, echo=FALSE}
+ggplot(data = ToothGrowth, aes(x=as.factor(dose), y=len, fill = supp)) + geom_histogram(stat = "identity") + facet_grid(. ~ supp) + xlab("Dose") + ylab("Tooth Length") + guides(fill = guide_legend(title = "Supplement"))
+  
+```
+
+##Exploratory Analysis
+The confidence intervals are assumed not to be pair(i.e. we are not comparing two different supplement types from individual subjects). These variables are independent and the distribution looks to be approximately normal. 
+
+```{r, echo=TRUE}
+anal <- lm(formula = len ~ dose + supp, data = ToothGrowth)
+confint(anal)
+
+summary(anal)
+
+```
+
+##Conclusion Analysis
+The linear model explains 70% of the variance in the data. For each coefficient, the null hypothesis is that no tooth length variation is explained by that particular variable. We can reject the null hypothesis and assume that each variable indicates variability in tooth length when the significance level is 5%.
+
