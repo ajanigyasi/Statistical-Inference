@@ -1,8 +1,8 @@
 ---
 title: "Statistical Inference - Simulation"
 author: "Ajani Gyasi"
-date: '`r format(Sys.time(), ''%d %B, %Y'')`'
-output: html_document
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output: pdf_document
 ---
 
 
@@ -66,7 +66,8 @@ legend("topright", c("simulation density", "theoretical density","theoretical me
 library(ggplot2)
 data <- data.frame(means)
 normal <- ggplot(data, aes(x = means)) + geom_histogram(aes(y = ..density..), col = "grey", fill = "beige") 
-normal + geom_density(aes(col = "purple"))
+normal  + geom_density(col = "green") 
+
 
 qqnorm(means)
 qqline(means)
